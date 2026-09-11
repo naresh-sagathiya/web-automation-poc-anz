@@ -1,0 +1,26 @@
+{
+  "name": "web-automation-poc-anz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright and Cucumber BDD automation starter",
+  "scripts": {
+    "test": "cucumber-js",
+    "test:headed": "cross-env HEADLESS=false cucumber-js",
+    "test:debug": "cross-env PWDEBUG=1 cucumber-js",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^12.2.0",
+    "dotenv": "^16.4.7",
+    "playwright": "^1.55.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "cross-env": "^7.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
