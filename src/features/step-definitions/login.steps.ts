@@ -11,7 +11,7 @@ Given('I am on the login page', async function (this: CustomWorld) {
 When(
   'I sign in with username {string} and password {string}',
   async function (this: CustomWorld, username: string, password: string) {
-    await new LoginPage(this.page).signIn(username, password);
+    await new LoginPage(this.page).login(username, password);
   }
 );
 

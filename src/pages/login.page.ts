@@ -1,19 +1,30 @@
-import { Page } from 'playwright';
+import { Page, Locator } from 'playwright';
+import { BasePage } from './base.page';
 
-export class LoginPage {
-  constructor(private readonly page: Page) {}
+export class LoginPage extends BasePage {
 
-  private readonly usernameInput = '[data-test="username"]';
-  private readonly passwordInput = '[data-test="password"]';
-  private readonly loginButton = '[data-test="login-button"]';
+  readonly username: Locator;
+  readonly password: Locator;
+  readonly loginButton: Locator;
+
+  constructor(page: Page) {
+    super(page);
+    this.username = page.locator('input[name="username"]');
+    this.password = page.locator('input[name="password"]');
+    this.loginButton = page.locator('input[value="Log In"]');
+
+  }
 
   async open(baseUrl: string): Promise<void> {
     await this.page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
   }
 
-  async signIn(username: string, password: string): Promise<void> {
-    await this.page.locator(this.usernameInput).fill(username);
-    await this.page.locator(this.passwordInput).fill(password);
-    await this.page.locator(this.loginButton).click();
+  /**
+   * Login with creditionals
+   */
+  async login(username: string, password: string): Promise<void> {
+    await this.fill(this.username, username);
+    await this.fill(this.password, password);
+    await this.click(this.loginButton);
   }
 }
