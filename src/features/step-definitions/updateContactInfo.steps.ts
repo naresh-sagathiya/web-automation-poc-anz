@@ -24,7 +24,7 @@ function getParaBankCredentials(): { username: string; password: string } {
 */
 async function openParaBankLoginPage(this: CustomWorld) {
   loginPage = new LoginPage(this.page);
-  await loginPage.open(this.parameters.baseUrl);
+  await loginPage.open(this.parameters.paraBankBaseUrl);
 }
 
 /**
