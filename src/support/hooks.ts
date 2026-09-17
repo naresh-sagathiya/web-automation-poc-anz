@@ -2,14 +2,15 @@ import { After, Before, BeforeAll, AfterAll, Status, setWorldConstructor } from 
 import { Browser, BrowserContext, chromium } from 'playwright';
 import dotenv from 'dotenv';
 import { CustomWorld } from './world';
-
-dotenv.config();
+import { LoginPage } from '../pages/login.page';
+import { OpenNewAccountPage } from '../pages/openNewAccount.page';
+dotenv.config({path: './.env',override: true});
 
 let browser: Browser;
 
 BeforeAll({ timeout: 30_000 }, async function () {
   browser = await chromium.launch({
-    headless: process.env.HEADLESS !== 'false',
+    headless: process.env.HEADLESS == 'false',
     executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || undefined
   });
 });
@@ -17,6 +18,10 @@ BeforeAll({ timeout: 30_000 }, async function () {
 Before(async function (this: CustomWorld) {
   const context: BrowserContext = await browser.newContext();
   this.page = await context.newPage();
+
+  // Initialize page objects
+  this.loginPage = new LoginPage(this.page);
+  this.openNewAccountPage = new OpenNewAccountPage(this.page);
 });
 
 After(async function (this: CustomWorld, scenario) {

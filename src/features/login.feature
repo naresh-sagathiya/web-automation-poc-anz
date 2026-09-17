@@ -1,9 +1,15 @@
-Feature: User authentication
-  As a registered customer
-  I want to sign in to the store
-  So that I can view the inventory
+@login
+Feature: ParaBank login
 
-  Scenario: Successful login with valid credentials
-    Given I am on the login page
-    When I sign in with username "standard_user" and password "secret_sauce"
-    Then I should see the inventory page
+  @valid-login
+  Scenario: Successful login of ParaBank with valid credentials
+    Given I am on the parabank login page
+    When I sign in with valid username "john" and password "demo"
+    Then I should see the account services page
+ 
+  @invalid-login
+  Scenario: Login of ParaBank with invalid credentials
+    Given I am on the parabank login page
+    When I sign in with invalid username "abc456" and password "abc@456"
+    Then I not able to see the account services page
+  
