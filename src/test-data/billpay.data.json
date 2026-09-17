@@ -1,0 +1,35 @@
+{
+  "accounts": {
+    "defaultPaymentAccount": "14454"
+  },
+
+  "payments": {
+    "valid": {
+      "name": "Electricity Provider",
+      "address": "1 Test Street",
+      "city": "Sydney",
+      "state": "NSW",
+      "zipCode": "2000",
+      "phone": "0299999999",
+      "accountNumber": "987654",
+      "verifyAccount": "987654",
+      "amount": "1.00"
+    },
+
+    "invalidCrnEquivalent": {
+      "name": "Electricity Provider",
+      "address": "1 Test Street",
+      "city": "Sydney",
+      "state": "NSW",
+      "zipCode": "2000",
+      "phone": "0299999999",
+      "accountNumber": "987654",
+      "verifyAccount": "123456",
+      "amount": "1.00"
+    }
+  },
+
+  "messages": {
+    "success": "Bill Payment Complete"
+  }
+}

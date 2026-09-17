@@ -19,6 +19,12 @@ Feature: MFA login
     Then I should see an invalid MFA code message
     And I should remain on the MFA challenge
 
+  Scenario: Expired MFA code is rejected
+    When I enter MFA credentials with username "demo_user" and password "secret_pass"
+    And I submit an expired MFA code
+    Then I should see an invalid MFA code message
+    And I should remain on the MFA challenge
+
   Scenario: Login is rejected when the MFA code is missing
     When I enter MFA credentials with username "demo_user" and password "secret_pass"
     And I submit the login form without an MFA code

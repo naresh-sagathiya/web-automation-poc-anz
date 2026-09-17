@@ -2,7 +2,7 @@ import { Given, Then, When } from '@cucumber/cucumber';
 import { strict as assert } from 'node:assert';
 import { MfaPage } from '../../pages/mfa.page';
 import { CustomWorld } from '../../support/world';
-import { generateCurrentOtp } from '../../support/otp';
+import { generateCurrentOtp, generateExpiredOtp } from '../../support/otp';
 
 function mfaPage(world: CustomWorld): MfaPage {
   return new MfaPage(world.page);
@@ -21,6 +21,10 @@ When(
 
 When('I submit the current TOTP code', async function (this: CustomWorld) {
   await mfaPage(this).submitCode(generateCurrentOtp());
+});
+
+When('I submit an expired MFA code', async function (this: CustomWorld) {
+  await mfaPage(this).submitCode(generateExpiredOtp());
 });
 
 When(

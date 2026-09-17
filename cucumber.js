@@ -7,7 +7,10 @@ const common = {
   publishQuiet: true,
   worldParameters: {
     baseUrl: process.env.BASE_URL || 'https://www.saucedemo.com',
-    mfaBaseUrl: process.env.MFA_BASE_URL || 'https://seleniumbase.github.io/realworld/login'
+    mfaBaseUrl: process.env.MFA_BASE_URL || 'https://seleniumbase.github.io/realworld/login',
+    paraBankBaseUrl: process.env.PARABANK_BASE_URL || 'https://parabank.parasoft.com/parabank',
+    paraBankUsername: process.env.PARABANK_USERNAME || 'john',
+    paraBankPassword: process.env.PARABANK_PASSWORD || 'demo'
   }
 };
 
