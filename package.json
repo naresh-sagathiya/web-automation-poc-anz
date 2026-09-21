@@ -5,6 +5,7 @@
   "description": "Playwright and Cucumber BDD automation starter",
   "scripts": {
     "test": "cucumber-js",
+    "test:github": "cucumber-js --config cucumber.github.js",
     "test:headed": "powershell -Command \"$env:HEADLESS='false'; cucumber-js; Remove-Item Env:HEADLESS\"",
     "test:mfa": "powershell -Command \"$env:HEADLESS='false'; cucumber-js src/features/mfa.feature; Remove-Item Env:HEADLESS\"",
     "test:bill": "powershell -Command \"$env:HEADLESS='false'; cucumber-js src/features/billpay.feature; Remove-Item Env:HEADLESS\"",
