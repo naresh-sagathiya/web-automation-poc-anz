@@ -10,7 +10,7 @@ let browser: Browser;
 
 BeforeAll({ timeout: 30_000 }, async function () {
   browser = await chromium.launch({
-    headless: process.env.HEADLESS == 'false',
+    headless: process.env.HEADLESS !== 'false',
     executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || undefined
   });
 });

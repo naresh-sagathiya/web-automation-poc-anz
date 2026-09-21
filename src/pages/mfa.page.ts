@@ -1,5 +1,5 @@
 import { Page } from 'playwright';
-
+/// import .env ----use url mfa 
 export class MfaPage {
   constructor(private readonly page: Page) {}
 
@@ -43,8 +43,29 @@ export class MfaPage {
     return this.page.locator(this.message).innerText();
   }
 
-  async loggedIn(): Promise<boolean> {
-    await this.page.waitForURL('https://seleniumbase.github.io/realworld/');
-    return this.page.url() === 'https://seleniumbase.github.io/realworld/';
-  }
+  // async loggedIn(): Promise<boolean> {
+  //   await this.page.waitForURL('https://seleniumbase.github.io/realworld/');
+  //   return this.page.url() === 'https://seleniumbase.github.io/realworld/';
+  // }
+//   async loggedIn(expectedUrl: string): Promise<boolean> {
+//   await this.page.waitForURL(expectedUrl, { timeout: 10000 });
+//   return this.page.url() === expectedUrl;
+// }
+//   async loggedIn(): Promise<boolean> {
+//   console.log('Current URL:', this.page.url());
+//   await this.page.waitForTimeout(2000);
+//   return !this.page.url().includes('/login');
+// }
+// async loggedIn(expectedUrl: string): Promise<boolean> {
+//   await this.page.waitForTimeout(3000);
+
+//   console.log('Current URL:', this.page.url());
+
+//   return !this.page.url().includes('/login');
+// }
+
+async loggedIn(expectedUrl: string): Promise<boolean> {
+  await this.page.waitForTimeout(3000);
+  return !this.page.url().includes('/login');
+}
 }

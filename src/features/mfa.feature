@@ -1,3 +1,4 @@
+@mfa
 Feature: MFA login
 
   Background:

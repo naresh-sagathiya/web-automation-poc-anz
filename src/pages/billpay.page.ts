@@ -1,10 +1,9 @@
 import { Page } from 'playwright';
 
 export class billPayPage {
-
   constructor(private readonly page: Page) {}
 
-  // Locators
+  // Form fields for the bill payment screen.
   private payeeName = '[name="payee.name"]';
   private address = '[name="payee.address.street"]';
   private city = '[name="payee.address.city"]';
@@ -20,6 +19,7 @@ export class billPayPage {
 
   private sendPaymentButton = '[value="Send Payment"]';
 
+  // Login to ParaBank using the configured username and password before payment actions.
   async login(
     baseUrl: string,
     username: string,
@@ -45,6 +45,7 @@ export class billPayPage {
     );
   }
 
+  // Open the Bill Pay page and wait until the payee form is visible.
   async openBillPayPage(
     baseUrl: string
   ): Promise<void> {
@@ -59,6 +60,7 @@ export class billPayPage {
       .waitFor({ state: 'visible', timeout: 30_000 });
   }
 
+  // Fill all required payee details for a valid payment submission.
   async fillPayee(details: any): Promise<void> {
 
     await this.page.locator(this.payeeName).fill(details.name);
@@ -80,6 +82,7 @@ export class billPayPage {
     await this.page.locator(this.amount).fill(details.amount);
   }
 
+  // Pick the available source account, falling back to the first valid option if needed.
   async selectAccount(
     accountNumber: string
   ): Promise<void> {
@@ -99,6 +102,7 @@ export class billPayPage {
     await accountSelect.selectOption(accountToUse, { timeout: 5_000 });
   }
 
+  // Submit the Bill Pay form and wait briefly for confirmation to render.
   async clickSendPayment(): Promise<void> {
 
     await this.page.click(
@@ -108,6 +112,7 @@ export class billPayPage {
     await this.page.waitForTimeout(500);
   }
 
+  // Read the whole page text to validate confirmation or validation messages.
   async getPageText(): Promise<string> {
 
     return await this.page
@@ -115,6 +120,7 @@ export class billPayPage {
       .innerText();
   }
 
+  // Read the receipt panel after a successful payment.
   async getReceiptText(): Promise<string> {
 
     return await this.page
@@ -122,6 +128,7 @@ export class billPayPage {
       .innerText();
   }
 
+  // Check whether the account number field is visible before validation errors are shown.
   async isAccountNumberVisible(): Promise<boolean> {
 
     return await this.page
@@ -129,6 +136,7 @@ export class billPayPage {
       .isVisible();
   }
 
+  // Check whether the verify account field is visible on the form.
   async isVerifyAccountVisible(): Promise<boolean> {
 
     return await this.page
