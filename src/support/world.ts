@@ -9,10 +9,10 @@ import { TransactionSearchPage } from '../pages/transcationSearch.page';
  * Defines custom parameters that can be passed to the Cucumber World.
  */
 export interface WorldParameters {
-  // Base application URL
+  // Base application URLs and credentials used across the BDD suite
   baseUrl: string;
-  mfaBaseUrl: string;
   paraBankBaseUrl: string;
+  mfaBaseUrl: string;
   paraBankUsername: string;
   paraBankPassword: string;
   
@@ -38,6 +38,13 @@ export class CustomWorld extends World<WorldParameters> {
 
   // Stores the account ID created during test execution
   createdAccountId!: string;
+
+  transferAmount = '';
+  transferDestinationAccount = '';
+
+  mockedNow?: Date;
+  selectedPaymentDate?: string;
+  expectedEffectiveDate?: string;
 
   constructor(options: IWorldOptions<WorldParameters>) {
     super(options);

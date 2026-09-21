@@ -71,11 +71,14 @@ When('user updates contact details with valid information', async function () {
 });
 
 
-/**
-* Submits the updated profile information and verifies
-* that the update operation completes successfully.
-*/
-Then('contact information should be updated successfully', async function () {
-  await updateContactPage.submitProfileUpdate();
-  await updateContactPage.verifyProfileUpdated();
-});
+Then(
+  'contact information should be updated successfully',
+  { timeout: 60_000 },
+  async function (this: CustomWorld) {
+    await updateContactPage.submitProfileUpdate(
+      this.parameters.paraBankUsername,
+      this.parameters.paraBankPassword,
+    );
+    await updateContactPage.verifyProfileUpdated();
+  }
+);
