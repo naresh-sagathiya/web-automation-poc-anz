@@ -2,6 +2,9 @@ import { IWorldOptions, World } from '@cucumber/cucumber';
 import { Page } from 'playwright';
 import { LoginPage } from '../pages/login.page';
 import { OpenNewAccountPage } from '../pages/openNewAccount.page';
+import { BalanceIntegrityAndTransactionPage } from '../pages/balanceIntegerityAndTranscation.page';
+import { TransactionSearchPage } from '../pages/transcationSearch.page';
+
 /**
  * Defines custom parameters that can be passed to the Cucumber World.
  */
@@ -12,6 +15,7 @@ export interface WorldParameters {
   paraBankBaseUrl: string;
   paraBankUsername: string;
   paraBankPassword: string;
+  
 }
 
 /**
@@ -21,9 +25,16 @@ export interface WorldParameters {
 export class CustomWorld extends World<WorldParameters> {
   // Playwright page instance used for browser automation
   page!: Page;
-   capturedConfirmation = '';
+  capturedConfirmation = '';
   loginPage!: LoginPage;
   openNewAccountPage!: OpenNewAccountPage;
+  balanceIntegrityAndTransactionPage!: BalanceIntegrityAndTransactionPage;
+  transactionAccountNumber?: string;
+  initialAccountBalance?: number;
+  paymentAmount?: number;
+  transactionSearchPage!: TransactionSearchPage;
+  paymentAccountNumber = '';
+
 
   // Stores the account ID created during test execution
   createdAccountId!: string;

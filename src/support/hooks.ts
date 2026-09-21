@@ -1,9 +1,12 @@
-import { After, Before, BeforeAll, AfterAll, Status, setWorldConstructor } from '@cucumber/cucumber';
+import { After, Before, BeforeAll, AfterAll, Status, setDefaultTimeout,setWorldConstructor } from '@cucumber/cucumber';
 import { Browser, BrowserContext, chromium } from 'playwright';
 import dotenv from 'dotenv';
 import { CustomWorld } from './world';
 import { LoginPage } from '../pages/login.page';
 import { OpenNewAccountPage } from '../pages/openNewAccount.page';
+import {BalanceIntegrityAndTransactionPage} from '../pages/balanceIntegerityAndTranscation.page';
+import { TransactionSearchPage } from '../pages/transcationSearch.page';
+setDefaultTimeout(30 * 1000);
 dotenv.config({path: './.env',override: true});
 
 let browser: Browser;
@@ -22,6 +25,9 @@ Before(async function (this: CustomWorld) {
   // Initialize page objects
   this.loginPage = new LoginPage(this.page);
   this.openNewAccountPage = new OpenNewAccountPage(this.page);
+  this.balanceIntegrityAndTransactionPage =new BalanceIntegrityAndTransactionPage(this.page);
+  this.transactionSearchPage = new TransactionSearchPage(this.page);
+
 });
 
 After(async function (this: CustomWorld, scenario) {
