@@ -27,6 +27,8 @@ export class CustomWorld extends World<WorldParameters> {
 
   // Stores the account ID created during test execution
   createdAccountId!: string;
+  transferAmount = '';
+  transferDestinationAccount = '';
 
   constructor(options: IWorldOptions<WorldParameters>) {
     super(options);

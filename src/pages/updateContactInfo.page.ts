@@ -1,6 +1,7 @@
 
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './base.page';
+import billPayData from '../test-data/billpay.data.json';
 
 
 /**
@@ -35,7 +36,8 @@ export class UpdateContactInfoPage extends BasePage {
         this.state = page.locator('#customer\\.address\\.state');
         this.zipCode = page.locator('#customer\\.address\\.zipCode');
         this.phoneNumber = page.locator('#customer\\.phoneNumber');
-        this.updateProfileButton = page.locator('input[value="Update Profile"]');   }
+        this.updateProfileButton = page.locator('input[type="button"][value="Update Profile"]');
+    }
 
      /**
      * Verifies that the user is successfully navigated
@@ -61,15 +63,14 @@ export class UpdateContactInfoPage extends BasePage {
     * test data to validate profile update functionality.
     */
     async updateContactInformation(): Promise<void> {
-        const contact = {
-            firstName: 'John',
-            lastName: 'Smith',
-            address: '123 Main St',
-            city: 'New York',
-            state: 'NY',
-            zipCode: '10001',
-            phone: '1234567890'
-        };
+        const contact = billPayData.contactInfo;
+
+        await expect
+            .poll(() => this.firstName.inputValue(), {
+                timeout: 30_000,
+                message: 'Expected ParaBank to load the existing customer profile before editing',
+            })
+            .not.toBe('');
 
         await this.fill(this.firstName, contact.firstName);
         await this.fill(this.lastName, contact.lastName);
@@ -84,15 +85,46 @@ export class UpdateContactInfoPage extends BasePage {
    * Submits the updated profile information by clicking
    * the Update Profile button.
    */
-    async submitProfileUpdate(): Promise<void> {
-        await this.click(this.updateProfileButton);
+    async submitProfileUpdate(username: string, password: string): Promise<void> {
+        await this.updateProfileButton.waitFor({ state: 'visible', timeout: 30_000 });
+        await expect(this.updateProfileButton).toBeEnabled();
+        await this.page.route('**/services_proxy/bank/customers/update/**', async route => {
+            const updateUrl = new URL(route.request().url());
+            updateUrl.searchParams.set('username', username);
+            updateUrl.searchParams.set('password', password);
+            await route.continue({ url: updateUrl.toString() });
+        });
+        try {
+            await this.updateProfileButton.click();
+        } finally {
+            await this.page.unroute('**/services_proxy/bank/customers/update/**');
+        }
     }
 
   /**
    * Verifies that the contact information update request
    * is processed successfully and confirmation message is displayed.
   */
-    async verifyProfileUpdated(): Promise<void> {
-        await expect(this.page.locator('#rightPanel')).toContainText('Profile Updated'); 
-    }
-}  
+  async verifyProfileUpdated(): Promise<void> {
+    const resultSection = this.page.locator('#updateProfileResult');
+    const errorSection = this.page.locator('#updateProfileError');
+
+    await expect
+        .poll(
+            async () => ({
+                successVisible: await resultSection.isVisible(),
+                errorVisible: await errorSection.isVisible(),
+            }),
+            {
+                timeout: 30_000,
+                message: 'Expected ParaBank to display either a profile-update success or error result',
+            },
+        )
+        .toEqual({ successVisible: true, errorVisible: false });
+
+    await expect(resultSection).toContainText('Profile Updated');
+    await expect(resultSection).toContainText(
+        'Your updated address and phone number have been added to the system.',
+    );
+ }
+}

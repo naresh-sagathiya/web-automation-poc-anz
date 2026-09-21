@@ -31,5 +31,15 @@
 
   "messages": {
     "success": "Bill Payment Complete"
+  },
+
+  "contactInfo": {
+    "firstName": "John",
+    "lastName": "Smith",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10001",
+    "phone": "1234567890"
   }
 }

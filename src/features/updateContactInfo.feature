@@ -3,8 +3,7 @@
 Feature: Update Contact Information
 
 
-
-  Background:
+    Background:
     Given user navigates to ParaBank application
     And user logs in with valid credentials
 
