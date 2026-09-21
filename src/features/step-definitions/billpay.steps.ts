@@ -1,29 +1,42 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { strict as assert } from 'node:assert';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import testData from '../../test-data/billpay.data.json';
 import { billPayPage } from '../../pages/billpay.page';
 import { CustomWorld } from '../../support/world';
 
-Given('I am logged into ParaBank',async function (this: CustomWorld) {
+function getScenarioCredentials(): { username: string; password: string } {
+  const credentialsPath = path.resolve(__dirname, '../../test-data/parabank-credentials.json');
+  const credentials = JSON.parse(readFileSync(credentialsPath, 'utf8')) as { username: string; password: string };
+  return credentials;
+}
+
+// Login to ParaBank before any bill payment scenario runs.
+Given('I am logged into ParaBank', async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
 
+    const { username, password } = getScenarioCredentials();
+
     await pageObj.login(
-      this.parameters.paraBankBaseUrl,
-      this.parameters.paraBankUsername,
-      this.parameters.paraBankPassword
+      this.parameters.baseUrl,
+      username,
+      password
     );
 
   }
 );
 
-Given('I open the Bill Pay page',async function (this: CustomWorld) {
+// Navigate to the Bill Pay page for the actual transaction flow.
+Given('I open the Bill Pay page', async function (this: CustomWorld) {
     const pageObj = new billPayPage(this.page);
-    await pageObj.openBillPayPage(this.parameters.paraBankBaseUrl);
+    await pageObj.openBillPayPage(this.parameters.baseUrl);
   }
 );
 
-When('I enter valid bill payment details',{ timeout: 30_000 },async function (this: CustomWorld) {
+// Populate a valid payee form and select the default account for successful payment.
+When('I enter valid bill payment details', { timeout: 30_000 }, async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
 
@@ -35,7 +48,8 @@ When('I enter valid bill payment details',{ timeout: 30_000 },async function (th
   }
 );
 
-When('I enter mismatched account numbers',{ timeout: 30_000 }, async function (this: CustomWorld) {
+// Populate the payment form with mismatched account numbers to verify validation.
+When('I enter mismatched account numbers', { timeout: 30_000 }, async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
 
@@ -45,7 +59,8 @@ When('I enter mismatched account numbers',{ timeout: 30_000 }, async function (t
   }
 );
 
-When('I submit the payment',async function (this: CustomWorld) {
+// Submit the Bill Pay form after data entry.
+When('I submit the payment', async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
 
@@ -53,6 +68,7 @@ When('I submit the payment',async function (this: CustomWorld) {
   }
 );
 
+// Attempt to submit the form without completing required fields.
 When('I submit the payment form without entering details', async function (this: CustomWorld) {
  
     const pageObj = new billPayPage(this.page);
@@ -61,7 +77,8 @@ When('I submit the payment form without entering details', async function (this:
   }
 );
 
-Then('payment should be successful',async function (this: CustomWorld) {
+// Assert the successful confirmation is displayed after a valid payment.
+Then('payment should be successful', async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
 
@@ -71,7 +88,8 @@ Then('payment should be successful',async function (this: CustomWorld) {
   }
 );
 
-Then('I capture the receipt details',async function (this: CustomWorld) {
+// Capture the generated payment receipt for verification/reporting.
+Then('I capture the receipt details', async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
 
@@ -79,13 +97,14 @@ Then('I capture the receipt details',async function (this: CustomWorld) {
 
     this.capturedConfirmation = confirmation;
 
-    console.log('Payment Confirmation:',confirmation);
+    console.log('Payment Confirmation:', confirmation);
 
-    assert.notEqual(confirmation,'');
+    assert.notEqual(confirmation, '');
   }
 );
 
-Then('validation errors should be displayed',async function (this: CustomWorld) {
+// Verify that validation messages appear when the form is incomplete.
+Then('validation errors should be displayed', async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
 
@@ -95,7 +114,8 @@ Then('validation errors should be displayed',async function (this: CustomWorld) 
   }
 );
 
-Then('the payment should be rejected',async function (this: CustomWorld) {
+// Ensure the system rejects invalid account number combinations.
+Then('the payment should be rejected', async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
 
@@ -105,7 +125,8 @@ Then('the payment should be rejected',async function (this: CustomWorld) {
   }
 );
 
-Then('the bill payment form should be displayed',async function (this: CustomWorld) {
+// Confirm that the payee account details fields are visible on the form.
+Then('the bill payment form should be displayed', async function (this: CustomWorld) {
 
     const pageObj = new billPayPage(this.page);
       assert.equal(

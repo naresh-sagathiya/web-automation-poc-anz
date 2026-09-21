@@ -5,8 +5,10 @@
   "description": "Playwright and Cucumber BDD automation starter",
   "scripts": {
     "test": "cucumber-js",
-    "test:headed": "cross-env HEADLESS=false cucumber-js",
-    "test:debug": "cross-env PWDEBUG=1 cucumber-js",
+    "test:headed": "powershell -Command \"$env:HEADLESS='false'; cucumber-js; Remove-Item Env:HEADLESS\"",
+    "test:mfa": "powershell -Command \"$env:HEADLESS='false'; cucumber-js src/features/mfa.feature; Remove-Item Env:HEADLESS\"",
+    "test:bill": "powershell -Command \"$env:HEADLESS='false'; cucumber-js src/features/billpay.feature; Remove-Item Env:HEADLESS\"",
+    "test:debug": "powershell -Command \"$env:PWDEBUG='1'; cucumber-js; Remove-Item Env:PWDEBUG\"",
     "typecheck": "tsc --noEmit"
   },
   "engines": {

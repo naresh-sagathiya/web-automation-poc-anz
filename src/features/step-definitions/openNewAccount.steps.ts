@@ -7,8 +7,12 @@ import { CustomWorld } from '../../support/world';
  * provided through environment variables.
  */
 Given('user is logged into ParaBank', async function (this: CustomWorld) {
-    await this.loginPage.open(process.env.BASE_URL!);
-    await this.loginPage.login(process.env.USERNAME!, process.env.PASSWORD!);
+    const baseUrl = this.parameters?.baseUrl || process.env.BASE_URL || 'https://parabank.parasoft.com/parabank';
+    const username = this.parameters?.paraBankUsername || process.env.PARABANK_USERNAME || process.env.USERNAME || 'john';
+    const password = this.parameters?.paraBankPassword || process.env.PARABANK_PASSWORD || process.env.PASSWORD || 'demo';
+
+    await this.loginPage.open(baseUrl);
+    await this.loginPage.login(username, password);
 });
 
 //Navigates to the specified application page
